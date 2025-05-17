@@ -28,7 +28,7 @@ const Footer = () => {
           <div className="container grid grid-four-column">
             <div className="footer-about">
               <h3>Chawk Bazar</h3>
-              <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. </p>
+              <p>Your one-stop destination for quality products at unbeatable prices.Shop with confidence and enjoy fast delivery, secure payments, and dedicated customer support only at Chawk Bazar.</p>
             </div>
             <div className="footer-subscribe">
               <h3>Subscribe to get important updates</h3>
@@ -59,7 +59,7 @@ const Footer = () => {
             </div>
             <div className="footer-contact">
               <h3>Call Us</h3>
-              <h3>+91 12345678978</h3>
+              <h3>+92 3143317952</h3>
             </div>
           </div>
 

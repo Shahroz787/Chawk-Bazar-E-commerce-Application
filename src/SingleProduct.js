@@ -8,6 +8,7 @@ import { MdSecurity } from "react-icons/md";
 import { TbTruckDelivery, TbReplace } from "react-icons/tb";
 import Star from "./components/Star";
 import AddToCart from "./components/AddToCart";
+import Loader from "./components/Loader";
 
 const SingleProduct = ({ id }) => {
   const { getSingleProduct, isSingleLoading, singleProduct } =
@@ -34,7 +35,7 @@ const SingleProduct = ({ id }) => {
   }, [id]); // Add id as a dependency
 
   if (isSingleLoading) {
-    return <div className="page_loading">Loading.....</div>;
+    return <div className="page_loading"><Loader /></div>;
   }
 
   // Function to handle the toggling of description

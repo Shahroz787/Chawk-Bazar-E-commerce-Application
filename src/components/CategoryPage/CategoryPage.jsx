@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Product from "../Product";
+import Loader from "../Loader";
 
 
 const CategoryPage = () => {
@@ -42,7 +43,7 @@ const CategoryPage = () => {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        < Loader />
       ) : categoryItems.length > 0 ? (
         <div className="grid lg:grid-cols-4 gap-4">
           {categoryItems.map((item) => (
