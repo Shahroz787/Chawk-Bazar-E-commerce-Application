@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "ChawkBazar",
+  "name": "E-commerce ChawkBazar",
+  "description": "E-commerce ChawkBazar is a platform for buying and selling products online.",
   "icons": [
     {
       "src": "favicon.ico",
