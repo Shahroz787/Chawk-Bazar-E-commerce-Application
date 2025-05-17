@@ -65,6 +65,16 @@ const Wrapper = styled.section`
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
   }
 
+   .services-1 div,
+  .services-3 div {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 1rem;
+}
+
+ 
   .services-2 {
     gap: 4rem;
     background-color: transparent;
