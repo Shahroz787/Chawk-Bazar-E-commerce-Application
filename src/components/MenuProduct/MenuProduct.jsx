@@ -46,26 +46,61 @@ const MenuProduct = ({ onclick }) => {
   };
 
   useEffect(() => {
+    // Restore scroll position if available
+    const savedPosition = sessionStorage.getItem("featuredScroll");
+    if (savedPosition) {
+      window.scrollTo(0, parseInt(savedPosition, 10));
+      sessionStorage.removeItem("featuredScroll");
+    }
+  }, []);
+
+  useEffect(() => {
+    const isImageValid = (url) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
+
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://fakestoreapi.in/api/products"
-        );
+        const response = await fetch("https://fakestoreapi.in/api/products");
         const data = await response.json();
         console.log(data);
 
-          const categories = Array.from(
-            new Set(data.products.map((item) => item.category))
-          ).map((category) =>
-            data.products.find((item) => item.category === category)
+        const categories = Array.from(
+          new Set(data.products.map((item) => item.category))
+        );
+
+        const categoryMap = new Map();
+
+        for (const category of categories) {
+          const itemsInCategory = data.products.filter(
+            (item) =>
+              item.category === category &&
+              item.image &&
+              typeof item.image === "string" &&
+              item.image.trim() !== "" &&
+              !item.image.includes("undefined")
           );
 
-          let displayCategories = categories;
-          while (displayCategories.length < 8) {
-            displayCategories = displayCategories.concat(categories);
+          for (const item of itemsInCategory) {
+            const isValid = await isImageValid(item.image);
+            if (isValid) {
+              categoryMap.set(category, item);
+              break; // only one valid image per category
+            }
           }
+        }
 
-          setUniqueCategories(displayCategories.slice(0, 8));
+        let displayCategories = Array.from(categoryMap.values());
+
+        while (displayCategories.length < 8) {
+          displayCategories = displayCategories.concat(displayCategories);
+        }
+
+        setUniqueCategories(displayCategories.slice(0, 8));
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -73,37 +108,6 @@ const MenuProduct = ({ onclick }) => {
 
     fetchData();
   }, []);
-
-  //   if (menuRef.current) {
-  //     const { scrollWidth, clientWidth, scrollLeft } = menuRef.current;
-  //     setIsRightArrowDisabled(scrollLeft + clientWidth >= scrollWidth);
-  //     setIsLeftArrowDisabled(scrollLeft === 0);
-  //   }
-  // };
-
-  // const scrollLeft = () => {
-  //   menuRef.current.scrollBy({
-  //     top: 0,
-  //     left: -200,
-  //     behavior: "smooth",
-  //   });
-  //   setTimeout(checkArrowVisibility, 300);
-  // };
-
-  // const scrollRight = () => {
-  //   menuRef.current.scrollBy({
-  //     top: 0,
-  //     left: 200,
-  //     behavior: "smooth",
-  //   });
-  //   setTimeout(checkArrowVisibility, 300);
-  // };
-
-  // useEffect(() => {
-  //   checkArrowVisibility();
-  //   window.addEventListener("resize", checkArrowVisibility);
-  //   return () => window.removeEventListener("resize", checkArrowVisibility);
-  // }, []);
 
   return (
     <div className="m-14 mt-20">
@@ -116,7 +120,10 @@ const MenuProduct = ({ onclick }) => {
             <div
               key={index}
               className="menu-item text-center whitespace-nowrap text-black"
-              onClick={() => onclick(item)}
+              onClick={() => {
+                sessionStorage.setItem("featuredScroll", window.scrollY);
+                onclick(item);
+              }}
             >
               <img
                 src={item.image}
@@ -127,6 +134,10 @@ const MenuProduct = ({ onclick }) => {
                   height: "150px",
                   objectFit: "contain",
                   cursor: "pointer",
+                }}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/images/placeholder.webp"; // fallback image
                 }}
               />
               <div className="lg:text-4xl lg:mt-6 text-2xl font-semibold">

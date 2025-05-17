@@ -28,6 +28,10 @@ const CategoryPage = () => {
     fetchCategoryItems();
   }, [categoryName]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [categoryName]);
+
   return (
     <div className="category-page mx-6">
       <div className="relative my-8">

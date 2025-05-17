@@ -2,15 +2,35 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import FormatPrice from "../Helpers/FormatPrice";
 import { Button } from "../styles/Button";
+import Modal from "./Modal";
+import SingleProduct from "../SingleProduct";
+import { useState } from "react";
 
 const ListView = ({ products }) => {
+  const [openProductId, setOpenProductId] = useState(null);
+
+  const handleOpenModal = (id) => {
+    setOpenProductId(id);
+    document.body.classList.add("no-scroll");
+  };
+
+  const handleCloseModal = () => {
+    setOpenProductId(null);
+    document.body.classList.remove("no-scroll");
+  };
+
   return (
     <Wrapper className="section">
       <div className="container grid">
         {products.map((curElem) => {
           const { id, name, image, price, description } = curElem;
           return (
-            <div className="card grid grid-two-column">
+            <div
+              className="card grid grid-two-column"
+              key={id}
+              onClick={() => handleOpenModal(id)}
+              style={{ cursor: "pointer" }}
+            >
               <figure>
                 <img src={image} alt={name} />
               </figure>
@@ -18,17 +38,30 @@ const ListView = ({ products }) => {
               <div className="card-data">
                 <h3>{name}</h3>
                 <p>
-                  {price}
+                  ${price}
                 </p>
                 <p>{description.slice(0, 90)}...</p>
 
-                <NavLink to={`/singleproduct/${id}`} className="btn-main">
-                  <Button className="btn">Read More</Button>
+                <NavLink className="btn-main">
+                  <Button
+                    className="btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleOpenModal(id);
+                    }}
+                  >
+                    check
+                  </Button>
                 </NavLink>
               </div>
             </div>
           );
         })}
+        {openProductId && (
+          <Modal isOpen={!!openProductId} onClose={handleCloseModal}>
+            <SingleProduct id={openProductId} />
+          </Modal>
+        )}
       </div>
     </Wrapper>
   );
