@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useCartContext } from "./context/cart_context";
 import CartItem from "./components/CartItem";
@@ -8,6 +9,10 @@ import FormatPrice from "./Helpers/FormatPrice";
 const Cart = () => {
   const { cart, clearCart, total_price, shipping_fee } = useCartContext();
   // console.log("🚀 ~ file: Cart.js ~ line 6 ~ Cart ~ cart", cart);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!cart || cart.length === 0) {
     return (
