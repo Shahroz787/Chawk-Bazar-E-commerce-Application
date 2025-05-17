@@ -1,0 +1,15 @@
+/* Updated hover effect for larger scale */
+.menu-item:hover .menu-image {
+  transform: scale(1.1); /* Larger scale on hover */
+  z-index: 2; /* Brings the hovered item above others */
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-image {
+  outline: none; /* Removes border on click */
+}
+
+.menu-item {
+  padding: 10px;
+  outline: none;
+}
