@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
-import { useProductContext } from "./productcontex";
+import { useProductContext } from "./productcontext";
 import reducer from "../reducer/filterReducer";
 
 const FilterContext = createContext();
@@ -8,6 +8,7 @@ const initialState = {
   filter_products: [],
   all_products: [],
   grid_view: true,
+  sortBy: "lowest",
   filters: {
     text: "",
     category: "all",
@@ -45,6 +46,11 @@ export const FilterContextProvider = ({ children }) => {
     dispatch({ type: "CLEAR_FILTERS" });
   };
 
+  const sorting = (event) => {
+  let userValue = event.target.value;
+  dispatch({ type: "SORTING_PRODUCTS", payload: userValue });
+};
+
   // filter products
   useEffect(() => {
     dispatch({ type: "FILTER_PRODUCTS" });
@@ -63,6 +69,7 @@ export const FilterContextProvider = ({ children }) => {
         setListView,
         updateFilterValue,
         clearFilters,
+        sorting
       }}>
       {children}
     </FilterContext.Provider>

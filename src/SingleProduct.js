@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { useProductContext } from "./context/productcontex";
+import { useProductContext } from "./context/productcontext";
 import PageNavigation from "./components/PageNavigation";
 import { Container } from "./styles/Container";
 import { MdSecurity } from "react-icons/md";
@@ -9,28 +9,30 @@ import { TbTruckDelivery, TbReplace } from "react-icons/tb";
 import Star from "./components/Star";
 import AddToCart from "./components/AddToCart";
 import Loader from "./components/Loader";
+import Rating from "./components/Rating/Rating";
 
 const SingleProduct = ({ id }) => {
-  const { getSingleProduct, isSingleLoading, singleProduct } =
-    useProductContext();
+  const { getSingleProduct, isSingleLoading, singleProduct } = useProductContext();
 
   const {
-    id: alias,
-    title,
+   _id,
     price,
     description,
-    color,
-    stars,
-    reviews,
     image,
-    brand, category
-  } = singleProduct;
+    brand,
+    category,
+    rating,
+    numReviews,
+    countInStock
+} = singleProduct;
+
+
 
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     if (id) {
-      getSingleProduct(`https://fakestoreapi.in/api/products/${id}`);
+      getSingleProduct(id);
     }
   }, [id]); // Add id as a dependency
 
@@ -56,22 +58,25 @@ const SingleProduct = ({ id }) => {
         <div className="grid grid-two-column">
           {/* product Images  */}
           <div className="product_images">
-            <img src={image} alt="title" />
+            <img src={image} alt="name" />
           </div>
 
           {/* product data  */}
           <div className="product-data">
             <h2>{brand}</h2>
-            <Star stars={stars} reviews={reviews} />
+            <Rating
+                rating={rating}
+                numReviews={numReviews}
+              ></Rating>
 
             <p className="product-data-price">
               MRP:
               <del>
-                {price + 250000}
+                ${price + 250}
               </del>
             </p>
             <p className="product-data-price product-data-real-price">
-              Deal of the Day: {price}
+              Deal of the Day: ${price}
             </p>
 
             {/* Description with toggle */}
@@ -107,10 +112,7 @@ const SingleProduct = ({ id }) => {
             <div className="product-data-info">
               <p>
                 Available:
-                <span>In Stock</span>
-              </p>
-              <p>
-                color : <span> {color} </span>
+                <span>{countInStock}</span>
               </p>
               <p>
                 category :<span> {category} </span>

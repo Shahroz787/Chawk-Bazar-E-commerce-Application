@@ -16,3 +16,10 @@ code {
     monospace;
 }
 
+.small_container {
+  max-width: 600px;
+}
+
+.site_container {
+  min-height: 100vh;
+}

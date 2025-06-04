@@ -20,7 +20,7 @@ const ProductImage = styled.img`
   }
 `;
 
-const Product = ({ id, title, image, price, category }) => {
+const Product = ({ _id, name, image, price, category }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleModal = () => {
@@ -34,19 +34,19 @@ const Product = ({ id, title, image, price, category }) => {
         <figure>
           <ProductImage
             src={image}
-            alt={title}
+            alt={name}
             onError={e => { e.target.onerror = null; e.target.src = "/images/placeholder.webp"; }}
           />
           <figcaption className="caption">{category}</figcaption>
         </figure>
         <div className="mt-6 lg:mt-4 lg:ml-8 pb-4 ml-10 text-xl">
-          <h3 className="text-2xl font-bold">{title.slice(0, 30)}...</h3>
+          <h3 className="text-2xl font-bold">{name.slice(0, 30)}...</h3>
           <p className="card-data--price mt-3">${price}</p>
         </div>
       </Card>
 
       <Modal isOpen={isModalOpen} onClose={toggleModal}>
-        <SingleProduct id={id} />
+        <SingleProduct id={_id} />
       </Modal>
     </>
   );

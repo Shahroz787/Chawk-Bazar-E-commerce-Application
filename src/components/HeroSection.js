@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../styles/Button";
 
@@ -13,12 +13,17 @@ const HeroSection = ({ myData }) => {
             <p className="intro-data">Welcome to </p>
             <h1> {name} </h1>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-              atque temporibus veniam doloribus libero ad error omnis voluptates
-              animi! Suscipit sapiente.
+              Chawk Bazar is a modern and user-friendly ecommerce platform where
+              you can find a wide variety of products all in one place. We are
+              committed to providing our customers with high-quality products,
+              fast delivery, and secure payment options for the best shopping
+              experience. At Chawk Bazar, you will discover the latest trends and
+              best deals in fashion, electronics, home essentials, and more. Our
+              team is always ready to serve you, making your online shopping easy
+              and rewarding.
             </p>
-            <NavLink>
-              <Button>show now</Button>
+            <NavLink to="/products">
+              <Button>shop now</Button>
             </NavLink>
           </div>
           {/* our homepage image  */}

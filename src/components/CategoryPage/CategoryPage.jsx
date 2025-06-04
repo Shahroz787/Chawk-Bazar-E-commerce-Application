@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Product from "../Product";
 import Loader from "../Loader";
-
+import axios from "axios";
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
@@ -13,9 +13,9 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchCategoryItems = async () => {
       try {
-        const response = await fetch(`https://fakestoreapi.in/api/products`);
-        const data = await response.json();
-        const filteredItems = data.products.filter(
+        const response = await axios.get("/api/products");
+        const data = response.data;
+        const filteredItems = data.filter(
           (item) => item.category === categoryName
         );
         setCategoryItems(filteredItems);
@@ -43,14 +43,14 @@ const CategoryPage = () => {
       </div>
 
       {loading ? (
-        < Loader />
+        <Loader />
       ) : categoryItems.length > 0 ? (
         <div className="grid lg:grid-cols-4 gap-4">
           {categoryItems.map((item) => (
             <Product
-              key={item.id}
-              id={item.id}
-              title={item.title}
+              key={item._id}
+              _id={item._id}
+              name={item.name}
               image={item.image}
               price={item.price}
               category={item.category}

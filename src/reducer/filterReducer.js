@@ -1,15 +1,17 @@
 const filterReducer = (state, action) => {
   switch (action.type) {
-    case "LOAD_FILTER_PRODUCTS":
-      let priceArr = action.payload.map((curElem) => curElem.price);
-      let maxPrice = Math.max(...priceArr);
-
+    case "LOAD_FILTER_PRODUCTS": {
+      // Defensive: ensure payload is an array
+      const productsArr = Array.isArray(action.payload) ? action.payload : [];
+      let priceArr = productsArr.map((curElem) => curElem.price);
+      let maxPrice = priceArr.length > 0 ? Math.max(...priceArr) : 0;
       return {
         ...state,
-        filter_products: [...action.payload],
-        all_products: [...action.payload],
+        filter_products: [...productsArr],
+        all_products: [...productsArr],
         filters: { ...state.filters, maxPrice, price: maxPrice },
       };
+    }
 
     case "SET_GRID_VIEW":
       return {
@@ -38,7 +40,14 @@ const filterReducer = (state, action) => {
       let { all_products } = state;
       let tempFilterProduct = [...all_products];
 
-      const { category, price } = state.filters;
+      const { text, category, price } = state.filters;
+
+      // Filter by text (search)
+      if (text) {
+        tempFilterProduct = tempFilterProduct.filter((curElem) =>
+          curElem.name.toLowerCase().includes(text.toLowerCase())
+        );
+      }
 
       if (category !== "all") {
         tempFilterProduct = tempFilterProduct.filter(
@@ -72,6 +81,38 @@ const filterReducer = (state, action) => {
           price: state.filters.maxPrice,
           minPrice: state.filters.maxPrice,
         },
+      };
+
+    case "SORTING_PRODUCTS":
+      let newSortData;
+
+      const { filter_products, sortBy } = state;
+      let tempSortProduct = [...filter_products];
+
+      if (action.payload === "lowest") {
+        newSortData = tempSortProduct.sort((a, b) => a.price - b.price);
+      }
+
+      if (action.payload === "highest") {
+        newSortData = tempSortProduct.sort((a, b) => b.price - a.price);
+      }
+
+      if (action.payload === "a-z") {
+        newSortData = tempSortProduct.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+      }
+
+      if (action.payload === "z-a") {
+        newSortData = tempSortProduct.sort((a, b) =>
+          b.name.localeCompare(a.name)
+        );
+      }
+
+      return {
+        ...state,
+        sortBy: action.payload,
+        filter_products: newSortData,
       };
 
     default:

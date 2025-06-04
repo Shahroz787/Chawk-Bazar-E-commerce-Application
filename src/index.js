@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "bootstrap";
 import reportWebVitals from "./reportWebVitals";
-import { AppProvider } from "./context/productcontex";
+import { AppProvider } from "./context/productcontext";
 import { FilterContextProvider } from "./context/filter_context";
 import { CartProvider } from "./context/cart_context";
 

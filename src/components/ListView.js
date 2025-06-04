@@ -9,8 +9,8 @@ import { useState } from "react";
 const ListView = ({ products }) => {
   const [openProductId, setOpenProductId] = useState(null);
 
-  const handleOpenModal = (id) => {
-    setOpenProductId(id);
+  const handleOpenModal = (_id) => {
+    setOpenProductId(_id);
     document.body.classList.add("no-scroll");
   };
 
@@ -23,12 +23,12 @@ const ListView = ({ products }) => {
     <Wrapper className="section">
       <div className="container grid">
         {products.map((curElem) => {
-          const { id, name, image, price, description } = curElem;
+          const { _id, name, image, price, description } = curElem;
           return (
             <div
               className="card grid grid-two-column"
-              key={id}
-              onClick={() => handleOpenModal(id)}
+              key={_id}
+              onClick={() => handleOpenModal(_id)}
               style={{ cursor: "pointer" }}
             >
               <figure>
@@ -47,7 +47,7 @@ const ListView = ({ products }) => {
                     className="btn"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleOpenModal(id);
+                      handleOpenModal(_id);
                     }}
                   >
                     check

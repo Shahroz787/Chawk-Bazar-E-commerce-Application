@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FiShoppingCart } from "react-icons/fi";
 import { CgMenu, CgClose } from "react-icons/cg";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { LinkContainer } from "react-router-bootstrap";
 import { useCartContext } from "../context/cart_context";
 
 const StyledNav = styled.nav`
@@ -26,6 +28,11 @@ const StyledNav = styled.nav`
       &:hover,
       &:active {
         color: ${({ theme }) => theme.colors.helper};
+      }
+
+      &.active {
+        color: ${({ theme }) => theme.colors.btn};
+        border-bottom: 2px solid ${({ theme }) => theme.colors.btn};
       }
     }
   }
@@ -75,6 +82,32 @@ const StyledNav = styled.nav`
   .user-login {
     font-size: 1.4rem;
     padding: 0.8rem 1.4rem;
+  }
+
+  /* CUSTOM: Dropdown Styling */
+  .dropdown-menu {
+    font-size: 1.6rem;
+    padding: 1rem;
+    min-width: 200px;
+    border-radius: 0.6rem;
+  }
+
+  .dropdown-item {
+    font-size: 1.6rem;
+    padding: 0.8rem 1.4rem;
+    color: ${({ theme }) => theme.colors.black};
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.helper};
+      color: #fff;
+    }
+  }
+
+  .nav-link,
+  .dropdown-toggle {
+    font-size: 1.6rem !important;
+    padding: 0.8rem 1.4rem !important;
+    color: ${({ theme }) => theme.colors.black};
   }
 
   @media (max-width: ${({ theme }) => theme.media.mobile}) {
@@ -134,6 +167,7 @@ const StyledNav = styled.nav`
         font-size: 4.2rem;
       }
     }
+
     .cart-trolley--link {
       position: relative;
 
@@ -159,7 +193,15 @@ const StyledNav = styled.nav`
 
 const Nav = () => {
   const [menuIcon, setMenuIcon] = useState(false);
-  const { total_item } = useCartContext();
+  const { total_item, userInfo, signOut } = useCartContext(); // Always use useCartContext for cart state
+
+  const signoutHandler = () => {
+    signOut();
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("paymentMethod");
+    window.location.href = "/signin";
+  };
 
   return (
     <StyledNav>
@@ -171,6 +213,14 @@ const Nav = () => {
               className="navbar-link "
               onClick={() => setMenuIcon(false)}>
               Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className="navbar-link "
+              onClick={() => setMenuIcon(false)}>
+              About
             </NavLink>
           </li>
           <li>
@@ -189,11 +239,57 @@ const Nav = () => {
               Contact
             </NavLink>
           </li>
+
           <li>
             <NavLink to="/cart" className="navbar-link cart-trolley--link" onClick={() => setMenuIcon(false)}>
               <FiShoppingCart className="cart-trolley" />
               <span className="cart-total--item"> {total_item} </span>
             </NavLink>
+          </li>
+          <li>
+            {userInfo ? (
+              <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+                <LinkContainer to="/profile">
+                  <NavDropdown.Item>User Profile</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/orderhistory">
+                  <NavDropdown.Item>Order History</NavDropdown.Item>
+                </LinkContainer>
+
+                <NavDropdown.Divider />
+                <Link
+                  className="dropdown-item"
+                  to="#signout"
+                  onClick={signoutHandler}
+                >
+                  Sign Out
+                </Link>
+              </NavDropdown>
+            ) : (
+              <Link id="signin" className="nav-link" to="/signin">
+                Sign In
+              </Link>
+            )}
+
+            {userInfo && userInfo.isAdmin && (
+              <NavDropdown title="Admin" id="admin-nav-dropdown">
+                <LinkContainer to="/dashboard">
+                  <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                </LinkContainer>
+
+                <LinkContainer to="/productlist">
+                  <NavDropdown.Item>Products</NavDropdown.Item>
+                </LinkContainer>
+
+                <LinkContainer to="/orderlist">
+                  <NavDropdown.Item>Orders</NavDropdown.Item>
+                </LinkContainer>
+
+                <LinkContainer to="/userlist">
+                  <NavDropdown.Item>Users</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
+            )}
           </li>
         </ul>
 

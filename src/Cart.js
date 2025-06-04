@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useCartContext } from "./context/cart_context";
 import CartItem from "./components/CartItem";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "./styles/Button";
 import FormatPrice from "./Helpers/FormatPrice";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const { cart, clearCart, total_price, shipping_fee } = useCartContext();
   // console.log("🚀 ~ file: Cart.js ~ line 6 ~ Cart ~ cart", cart);
 
@@ -22,6 +23,10 @@ const Cart = () => {
     );
   }
 
+   const checkoutHandler = () => {
+    navigate("/signin?redirect=/shipping");
+  };
+
   return (
     <Wrapper>
       <div className="container">
@@ -35,9 +40,9 @@ const Cart = () => {
         <hr />
         <div className="cart-item">
           {cart.map((curElem) => {
-            console.log("curElem",curElem);
-            
-            return <CartItem key={curElem.id} {...curElem} />;
+            console.log("curElem", curElem);
+
+            return <CartItem key={curElem._id}{...curElem} />;
           })}
         </div>
         <hr />
@@ -56,21 +61,31 @@ const Cart = () => {
             <div>
               <p>subtotal:</p>
               <p>
-                {total_price} 
+                {total_price}
               </p>
             </div>
             <div>
               <p>shipping fee:</p>
               <p>
-               {shipping_fee} 
+                {shipping_fee}
               </p>
             </div>
             <hr />
             <div>
               <p>order total:</p>
               <p>
-                {shipping_fee + total_price} 
+                {shipping_fee + total_price}
               </p>
+            </div>
+            <div>
+              <Button
+                onClick={checkoutHandler}
+                type="button"
+                variant="primary"
+                disabled={cart.length === 0}
+              >
+                Proceed to Checkout
+              </Button>
             </div>
           </div>
         </div>

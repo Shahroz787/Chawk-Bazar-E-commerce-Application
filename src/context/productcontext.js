@@ -4,8 +4,7 @@ import reducer from "../reducer/productReducer";
 
 const AppContext = createContext();
 
-const API = "https://fakestoreapi.in/api/products";
-
+const API = "/api/products";
 
 const initialState = {
   isLoading: false,
@@ -23,28 +22,24 @@ const AppProvider = ({ children }) => {
     dispatch({ type: "SET_LOADING" });
     try {
       const res = await axios.get(url);
-      const products = await res.data;
-      console.log("products",products)
-      dispatch({ type: "SET_API_DATA", payload: products });
+      // Backend returns { products: [...] }
+      dispatch({ type: "SET_API_DATA", payload: res.data });
     } catch (error) {
       dispatch({ type: "API_ERROR" });
     }
   };
 
   // my 2nd api call for single product
+const getSingleProduct = async (id) => {
+  dispatch({ type: "SET_SINGLE_LOADING" });
+  try {
+    const res = await axios.get(`/api/products/${id}`);
+    dispatch({ type: "SET_SINGLE_PRODUCT", payload: res.data });
+  } catch (error) {
+    dispatch({ type: "SET_SINGLE_ERROR" });
+  }
+};
 
-  const getSingleProduct = async (url) => {
-    console.log("url",url)
-    dispatch({ type: "SET_SINGLE_LOADING" });
-    try {
-      const res = await axios.get(url);
-      const singleProduct = await res.data.product;
-      console.log("single",singleProduct)
-      dispatch({ type: "SET_SINGLE_PRODUCT", payload: singleProduct });
-    } catch (error) {
-      dispatch({ type: "SET_SINGLE_ERROR" });
-    }
-  };
 
   useEffect(() => {
     getProducts(API);

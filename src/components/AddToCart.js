@@ -10,7 +10,7 @@ const AddToCart = ({ product }) => {
 
   const { addToCart } = useCartContext();
 
-  const { id, color } = product; // No stock here
+   const { _id, image, category, price,slug,name }  = product; // No stock here
 
   const [amount, setAmount] = useState(1); // Default amount as 1
 
@@ -33,7 +33,7 @@ const AddToCart = ({ product }) => {
         setIncrease={setIncrease}
       />
 
-      <NavLink to="/cart" onClick={() => addToCart(id, color, amount, product)}>
+      <NavLink to="/cart" onClick={() => addToCart(_id, amount, image, category,price,slug,name )}>
         <Button className="btn">Add To Cart</Button>
       </NavLink>
     </Wrapper>
