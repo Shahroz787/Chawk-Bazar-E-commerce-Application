@@ -24,6 +24,8 @@ import PaymentMethod from "./PaymentMethod.js";
 import Orders from "./Orders.js";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.js";
 import Profile from "./profile.js";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+
 
 const App = () => {
   const theme = {
@@ -52,6 +54,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <HelmetProvider>
         <Router>
+          <ScrollToTop />
           <GlobalStyle />
           <ToastContainer position="top-right" limit={1} />
           <Header />

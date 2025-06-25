@@ -4,7 +4,6 @@ import Product from "./Product";
 
 const GridView = ({ products }) => {
 
-
   return (
     <Wrapper className="section">
       <div className="container grid grid-three-column">
